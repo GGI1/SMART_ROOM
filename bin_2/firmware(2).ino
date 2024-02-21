@@ -36,7 +36,7 @@ sens D;
     
 void setup() {
   Serial.begin(9600);
-   Serial.println("свет  расст. темп.");
+  
   pinMode(A7_PIN, INPUT);
   pinMode(ECHO_PIN, INPUT);
   pinMode(TRIG_PIN, OUTPUT);
@@ -45,6 +45,7 @@ void setup() {
 
   sensors.begin();  // Инициализация библиотеки для работы с датчиками температуры
   irrecv.enableIRIn(); // Включение приемника ИК-сигналов
+  Serial.println("свет  расст. темп.");
 }
 
 String sens_upd(bool test){
