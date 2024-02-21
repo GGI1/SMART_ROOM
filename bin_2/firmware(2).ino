@@ -13,6 +13,10 @@ const int TEMP_PIN = 5;     // Пин терморезистора DS18B20
 unsigned long lastLightValue = 0;
 unsigned long lastDistance = 0;
 float lastTempC = 0.0;
+uint32_t timer;
+
+String SendStr;
+char target[] = "cmd";
 
 OneWire oneWire(TEMP_PIN);  // Создание экземпляра OneWire для взаимодействия с датчиком температуры
 DallasTemperature sensors(&oneWire);  // Создание экземпляра DallasTemperature
@@ -31,6 +35,20 @@ sens D;
 
 
 
+void run_command(String comand){
+  if (comand.length()>=4){
+    comand = comand.substring(4);
+    if (comand = "reboot"){
+      asm volatile(" jmp 0");
+    }
+    if (comand = "test"){
+      Serial.println(sens_upd(1));
+    }
+  }
+}
+
+
+
 
 void setup() {
   Serial.begin(9600);
@@ -44,7 +62,7 @@ void setup() {
   irrecv.enableIRIn(); // Включение приемника ИК-сигналов
 }
 
-void sens_upd(){
+String sens_upd(bool test){
   
   float tempC = sensors.getTempCByIndex(0);  // Получение температуры от датчика DS18B20
 
@@ -60,18 +78,29 @@ void sens_upd(){
 
 
 
-
+  SendStr =  String(lightValue) + "," + String(currentDistance)  + "," +  String(tempC);
   
   D.LV = lightValue;
   D.CD = currentDistance;
   D.tC = tempC;
-  
+
+  if (test){
+    String tesst = "  Свет:" + String(D.LV) + "   Дистанция:" + String(D.CD) + "    Температура:" + String(D.tC);
+    return(tesst);
+  }
+  return(SendStr);
 }
 
 void loop() {
   
-  
-      sens_upd();
+  if (timer > 1000){
+    
+    Serial.println(sens_upd(0));    //Вызываем ф-ю без теста
+    
+    timer = millis();
+   
+  }
+   
 
 
   if (irrecv.decode(&results)) {
@@ -82,6 +111,12 @@ void loop() {
     // Дополнительная обработка кода, если необходимо
 
     irrecv.resume(); // Подготовка к приему следующего сигнала
+  }
+
+  if (Serial.available() > 0) {           //проверка и принятие команд
+    if (Serial.find(target))
+      Serial.println();
+      run_command(Serial.readString());  
   }
 
 
