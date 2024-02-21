@@ -36,12 +36,15 @@ sens D;
 
 
 void run_command(String comand){
+  Serial.print("Run");
   if (comand.length()>=4){
     comand = comand.substring(4);
     if (comand = "reboot"){
       asm volatile(" jmp 0");
+      Serial.print("----------REBOOT-----------");
     }
     if (comand = "test"){
+      Serial.print("___TEST___");
       Serial.println(sens_upd(1));
     }
   }
@@ -115,8 +118,8 @@ void loop() {
 
   if (Serial.available() > 0) {           //проверка и принятие команд
     if (Serial.find(target))
-      Serial.println();
-      run_command(Serial.readString());  
+      Serial.println("ЦЕЛЬ");
+      run_command(String(Serial.read()));  
   }
 
 
