@@ -55,14 +55,14 @@ void build(){
     
     hub.Button(&b2, F("Открыть замок"), GH_VIOLET);
 
-    hub.Spinner(&spin_am, GH_UINT8, F("Amount"), 0, 20, 1);
+    //hub.Spinner(&spin_am, GH_UINT8, F("Amount"), 0, 20, 1);
     
     hub.WidgetSize(50);
 
     //hub.Label_(F("lbl"), F("Something Что-то"));
 
    
-    hub.Title(F(" "));
+    //hub.Title(F(" "));
     
     hub.WidgetSize(100);
     
@@ -101,7 +101,7 @@ void build(){
       
       hub.Switch_(F("sw_alert"),&sw_alert,F("СИРЕНА"), GH_RED);
 
-      hub.Switch_(F("sw_acces"),&sw_acces,F("Доступ с ручки"));
+      hub.Switch_(F("acces_in"),&acces_in,F("Доступ с ручки"));
 
       
     }
@@ -172,7 +172,7 @@ void loop() {
       //delay(500);
       timer = millis();
   }
-  if (b_IN && acces_in) {
+  if (b_IN) {
     
       digitalWrite(r_dl, HIGH);
       //delay(500);
