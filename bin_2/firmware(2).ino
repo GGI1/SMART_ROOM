@@ -39,7 +39,7 @@ sens D;
   //if (comand.length()>=4)
     //comand = comand.substring(4);
    
-}
+
 
 
 
@@ -108,21 +108,23 @@ void loop() {
   }
 
   if (Serial.available() > 0) {           //проверка и принятие команд
-    if (Serial.find(target))
+    if (Serial.find(target)){
       Serial.print("Выполняю команду ");
-      if(Serial.find(" reboot"){
+      if(Serial.find(" reboot")){
         Serial.println("ПЕРЕЗАГРУЗКА");
         asm volatile(" jmp 0");
-      }
+        }
       if (Serial.find(" test")){
         Serial.println("ТЕСТ:");
         Serial.println(sens_upd(1));
         
-      }   
+        } 
+    }  
+     
   }
-
-
-
-
-
 }
+
+
+
+
+
