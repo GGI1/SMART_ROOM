@@ -1,5 +1,4 @@
 
-
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <IRremote.h>
@@ -23,7 +22,6 @@ DallasTemperature sensors(&oneWire);  // Создание экземпляра D
 IRrecv irrecv(IR_PIN);
 decode_results results;
 
-
 struct sens {
   int LV;
   unsigned long CD;
@@ -33,19 +31,12 @@ struct sens {
 
 sens D;
 
-
-
-
   //if (comand.length()>=4)
     //comand = comand.substring(4);
-   
-
-
-
-
-
+    
 void setup() {
   Serial.begin(9600);
+   Serial.println("свет  расст. темп.");
   pinMode(A7_PIN, INPUT);
   pinMode(ECHO_PIN, INPUT);
   pinMode(TRIG_PIN, OUTPUT);
@@ -69,9 +60,7 @@ String sens_upd(bool test){
   digitalWrite(TRIG_PIN, LOW);
 
   unsigned long currentDistance = pulseIn(ECHO_PIN, HIGH) * 0.034 / 2;  // Измерение расстояния
-
-
-
+  
   SendStr =  String(lightValue) + "," + String(currentDistance)  + "," +  String(tempC);
   
   D.LV = lightValue;
@@ -87,16 +76,11 @@ String sens_upd(bool test){
 
 void loop() {
   
-  if (timer > 1000){
-    
+  if (millis() - timer > 1000){
     Serial.println(sens_upd(0));    //Вызываем ф-ю без теста
-    
     timer = millis();
-   
   }
-   
-
-
+  
   if (irrecv.decode(&results)) {
     // Если получен сигнал от ИК-пульта
     Serial.print("IR Code: 0x");
@@ -106,21 +90,19 @@ void loop() {
 
     irrecv.resume(); // Подготовка к приему следующего сигнала
   }
-
+  
   if (Serial.available() > 0) {           //проверка и принятие команд
     if (Serial.find(target)){
       Serial.print("Выполняю команду ");
-      if(Serial.find(" reboot")){
+      if(Serial.find("reboot")){
         Serial.println("ПЕРЕЗАГРУЗКА");
         asm volatile(" jmp 0");
         }
-      if (Serial.find(" test")){
+      if (Serial.find("test")){
         Serial.println("ТЕСТ:");
         Serial.println(sens_upd(1));
-        
-        } 
+      } 
     }  
-     
   }
 }
 
