@@ -15,7 +15,7 @@
 
 // подключаем библиотеку и настраиваем устройство
 #include <GyverHub.h>
-GyverHub hub("MyDevices", "ДУ-1", "");
+GyverHub hub("Мои_устройства", "ДУ-1", "🔒");
 // иконки
 // https://fontawesome.com/v5/cheatsheet/free/solid
 // https://fontawesome.com/v5/search?o=r&m=free&s=solid
@@ -44,6 +44,11 @@ bool acces_in = true;
 // это наш билдер. Он будет вызываться библиотекой
 // для сборки интерфейса, чтения значений и проч.
 void build(){
+
+    hub.setVersion("GGI1/SMART_ROOM@0.03");
+
+
+  
     // сделаем интерфейс в виде стильных виджетов
     // BeginWidgets() начинает новую горизонтальную строку виджетов
     hub.BeginWidgets();
@@ -53,7 +58,7 @@ void build(){
     
     
     
-    hub.Button(&b2, F("Открыть замок"), GH_VIOLET);
+    hub.ButtonIcon(&b2, F("Открыть замок"), GH_VIOLET);
 
     //hub.Spinner(&spin_am, GH_UINT8, F("Amount"), 0, 20, 1);
     
@@ -88,10 +93,13 @@ void build(){
   // 4 модуля Label_
   hub.WidgetSize(50);
   hub.Label_(F("Label 1"), F("Ручка снаружи:"));//надпись 1
-  hub.LED(b_OUT, F("Icon"), F(""));
+  hub.LED(acces_out, F("Icon"), F(""));
   
   hub.Label_(F("Label 3"), F("Ручка изнутри:"));//надпись 2
-  hub.LED(b_IN, F("Icon"), F(""));
+  hub.LED(acces_in, F("Icon"), F(""));
+
+  hub.Label_(F("Label 4"), F("Состояние двери:"));//надпись 2
+  hub.LED(b_IN, F("Icon"), F("🚪"));
 
     }
     
@@ -101,7 +109,7 @@ void build(){
       
       hub.Switch_(F("sw_alert"),&sw_alert,F("СИРЕНА"), GH_RED);
 
-      hub.Switch_(F("acces_in"),&acces_in,F("Доступ с ручки"));
+      hub.Switch_(F("acces_out"),&acces_out,F("Доступ с ручки"));
 
       
     }
@@ -160,11 +168,15 @@ void setup() {
 void loop() {
 
   hub.tick();  // обязательно тикаем тут
-  
-  
+
+ 
   b_OUT =!digitalRead(b_dh_out);
   b_IN =!digitalRead(b_dh_in);
-  
+
+  if (b_OUT && !acces_out){
+    
+  }
+    
   
   if (b_OUT && acces_out) {
       
