@@ -15,7 +15,7 @@
 
 // подключаем библиотеку и настраиваем устройство
 #include <GyverHub.h>
-GyverHub hub("Мои устройства", "ДУ-1", "🔒");
+GyverHub hub("My_Devices", "ДУ-1", "🔒");
 // иконки
 // https://fontawesome.com/v5/cheatsheet/free/solid
 // https://fontawesome.com/v5/search?o=r&m=free&s=solid
